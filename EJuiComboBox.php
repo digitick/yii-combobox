@@ -60,24 +60,28 @@ class EJuiComboBox extends CJuiInputWidget
 	 * Run this widget.
 	 * This method registers necessary javascript and renders the needed HTML code.
 	 */
+	 
 	public function run()
 	{
 		list($name, $id) = $this->resolveNameID();
 
 		if (is_array($this->data) && !empty($this->data)){
-			$data = array_combine($this->data, $this->data);
+			//if $data is not an assoc array make each value its key
+			$data=((bool)count(array_filter(array_keys($this->data), 'is_string')))?
+				$this->data:
+				array_combine($this->data, $this->data);
 			array_unshift($data, null);
 		}
 		else
 			$data = array();
-
-		echo CHtml::dropDownList(null, null, $data, array('id' => $id . '_select', 'style'=>'display:none;'));
-
+		
 		if ($this->hasModel())
-			echo CHtml::activeTextField($this->model, $this->attribute, $this->htmlOptions);
+			echo CHtml::activeDropDownList($this->model,$this->attribute,$data);
 		else
-			echo CHtml::textField($name, $this->value, $this->htmlOptions);
-
+			echo CHtml::dropDownList($name, $this->value, $data);
+			
+		echo CHtml::textField(null,null,array('id'=>$id.'_combobox'));
+			
 		$this->options = array_merge($this->defaultOptions, $this->options);
 
 		$options = CJavaScript::encode($this->options);
@@ -86,7 +90,7 @@ class EJuiComboBox extends CJuiInputWidget
 
 		$js = "combobox({$options});";
 
-		list($id, $js) = $this->setSelector($id, $js);
+		list($id, $js) = $this->setSelector($id.'_combobox', $js);
 		$cs->registerScript(__CLASS__ . '#' . $id, $js);
 	}
 
