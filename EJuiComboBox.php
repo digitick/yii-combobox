@@ -67,10 +67,15 @@ class EJuiComboBox extends CJuiInputWidget
 
 		if (is_array($this->data) && !empty($this->data)){
 			//if $data is not an assoc array make each value its key
-			$data=((bool)count(array_filter(array_keys($this->data), 'is_string')))?
-				$this->data:
-				array_combine($this->data, $this->data);
-			array_unshift($data, null);
+			if((bool)count(array_filter(array_keys($this->data), 'is_string'))){
+				$data=$this->data;
+				//does the same as array_unshift($data,null) but does not break assoc arrays
+				$data=array("","")+$data;
+			}
+			else{
+				$data=array_combine($this->data, $this->data);
+				array_unshift($data, null);
+			}
 		}
 		else
 			$data = array();
