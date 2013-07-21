@@ -1,4 +1,3 @@
-
 (function($) {
 	$.widget("ui.combobox", {
 		_create: function() {
@@ -94,7 +93,7 @@
 				input.focus();
 			});
 		},
-		destroy: function() {
+		_destroy: function() {
 			this.input.remove();
 			this.button.remove();
 			this.element.show();
