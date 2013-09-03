@@ -36,6 +36,9 @@
 					});
 					eval(options.onSelect);
 				},
+				open: function(event, ui) {
+					eval(options.onOpen);
+				},
 				change: function(event, ui) {
 					if (!ui.item) {
 						if (!options.allowText) {
